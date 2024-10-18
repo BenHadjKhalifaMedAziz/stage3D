@@ -22,7 +22,7 @@ public class WallGenerator : MonoBehaviour
 
     void Start()
     {
-        GenerateWalls();
+     //   GenerateWalls();
     }
 
     public void GenerateWalls()
