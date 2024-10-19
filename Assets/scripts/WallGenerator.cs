@@ -11,6 +11,7 @@ public class WallGenerator : MonoBehaviour
     private GameObject bossWallPrefab;
     private GameObject bossCornerPrefab;
     private GameObject passagePrefab;
+    private GameObject floorPrefab;
 
     // Getters and Setters
     public GameObject WallPrefab { get { return wallPrefab; } set { wallPrefab = value; } }
@@ -19,10 +20,12 @@ public class WallGenerator : MonoBehaviour
     public GameObject BossCornerPrefab { get { return bossCornerPrefab; } set { bossCornerPrefab = value; } }
     public GameObject PassagePrefab { get { return passagePrefab; } set { passagePrefab = value; } }
 
+    public GameObject FloorPrefab { get { return floorPrefab; } set { floorPrefab = value; } }
+
 
     void Start()
     {
-     //   GenerateWalls();
+        //   GenerateWalls();
     }
 
     public void GenerateWalls()
@@ -44,7 +47,6 @@ public class WallGenerator : MonoBehaviour
             GenerateRoomWalls(bossRoom, bossWallPrefab, bossCornerPrefab);
         }
 
-
         GeneratePassageWalls();
 
 
@@ -55,6 +57,8 @@ public class WallGenerator : MonoBehaviour
         List<GameObject> corners = new List<GameObject>();
         List<GameObject> walls = new List<GameObject>();
         List<GameObject> doors = new List<GameObject>();
+        List<GameObject> floors = new List<GameObject>();
+
 
         foreach (Transform child in room.transform)
         {
@@ -70,6 +74,10 @@ public class WallGenerator : MonoBehaviour
             {
                 doors.Add(child.gameObject);
             }
+            else
+            {
+                floors.Add(child.gameObject);
+            }
         }
 
         // Create the 3dWalls and 3dCorners parents for this room
@@ -82,7 +90,7 @@ public class WallGenerator : MonoBehaviour
         List<List<GameObject>> xGroups = GroupWalls(walls, doors, corners, "X");
         List<List<GameObject>> zGroups = GroupWalls(walls, doors, corners, "Z");
 
-        foreach (List<GameObject> group in xGroups)
+        foreach (List<GameObject> group in xGroups)//28068483
         {
             GenerateWall(group, wallsParent, wallPrefab);
         }
@@ -93,6 +101,8 @@ public class WallGenerator : MonoBehaviour
         }
 
         GenerateCornerWalls(corners, cornersParent, cornerPrefab);
+        GenerateFloors(floors, room, floorPrefab);
+
     }
 
     List<List<GameObject>> GroupWalls(List<GameObject> walls, List<GameObject> doors, List<GameObject> corners, string axis)
@@ -181,6 +191,7 @@ public class WallGenerator : MonoBehaviour
         if (walls.Count == 0) return;
 
         Vector3 firstWallPos = walls[0].transform.position;
+
         bool isXAligned = true;
         bool isZAligned = true;
 
@@ -188,9 +199,12 @@ public class WallGenerator : MonoBehaviour
         {
             if (wall.transform.position.x != firstWallPos.x)
                 isXAligned = false;
+
             if (wall.transform.position.z != firstWallPos.z)
                 isZAligned = false;
         }
+
+
 
         if (!isXAligned && !isZAligned)
         {
@@ -207,7 +221,7 @@ public class WallGenerator : MonoBehaviour
         if (isXAligned)
         {
             float combinedLength = CalculateCombinedLength(walls, "X");
-            CreateWall(midPoint, new Vector3(1, wallHeight, combinedLength), parent, wallPrefab, "3dWall");
+            CreateWall1(midPoint, new Vector3(combinedLength, wallHeight, 1), parent, wallPrefab, "3dWall");
         }
         else if (isZAligned)
         {
@@ -251,7 +265,7 @@ public class WallGenerator : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     Vector3 CalculateMidPoint(List<GameObject> walls)
@@ -301,4 +315,40 @@ public class WallGenerator : MonoBehaviour
         wall.name = name;
         wall.transform.SetParent(parent.transform);
     }
+    void CreateWall1(Vector3 position, Vector3 scale, GameObject parent, GameObject prefab, string name)  // inversing the walls , for better texturing 
+    {
+        // Instantiate the wall or corner prefab with a 90-degree rotation around the y-axis
+        GameObject wall = Instantiate(prefab, position, Quaternion.Euler(0, 90, 0));
+        wall.transform.localScale = scale;
+        // Set the name and parent
+        wall.name = name;
+        wall.transform.SetParent(parent.transform);
+    }
+
+    void GenerateFloors(List<GameObject> floors, GameObject room, GameObject floorPrefab)
+    {
+        if (floors.Count == 0) return;
+
+        Bounds bounds = new Bounds(floors[0].transform.position, Vector3.zero);
+        foreach (GameObject floor in floors)
+        {
+            bounds.Encapsulate(floor.transform.position);
+        }
+
+        Vector3 position = bounds.center;
+        position.y += 0.51f; // Adjust the Y position
+        Vector3 scale = new Vector3(bounds.size.x + 1, 1, bounds.size.z + 1); // Add buffer to scale
+
+        CreateFloor(position, scale, room, floorPrefab);
+    }
+
+    void CreateFloor(Vector3 position, Vector3 scale, GameObject parent, GameObject prefab)
+    {
+        GameObject floor = Instantiate(prefab, position, Quaternion.identity);
+        floor.transform.localScale = new Vector3(scale.x / 10, 1, scale.z / 10); // Adjust plane's scale
+        floor.name = "Floor";
+        floor.transform.SetParent(parent.transform);
+    }
+
 }
+

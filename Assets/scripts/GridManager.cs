@@ -33,30 +33,56 @@ public class GridManager : MonoBehaviour
         public GameObject roomPrefab { get { return roomPrefab; } set { roomPrefab = value; } }
         public GameObject outlinePrefab { get { return outlinePrefab; } set { outlinePrefab = value; } }
     */
+
+    [Header("Rooms Dimentions ")]
     public int roomMinWidth = 5;
     public int roomMaxWidth = 8;
     public int roomMinHeight = 5;
     public int roomMaxHeight = 8;
+
+    [Header("Number of Main ROoms ")]
     public int numberOfRooms = 8;
-    public int bossRoomParent;
+    private int bossRoomParent;
 
     private GameObject roomPrefab;
     private GameObject outlinePrefab;
     private Dictionary<Vector3, CellInfo> gridDictionary = new Dictionary<Vector3, CellInfo>();
-    public Square gridOutlineChanger;
-    public WallGenerator wallGenerator;
 
 
-    public PrefabManager prefabManager;
+    private Square gridOutlineChanger;
+    private WallGenerator wallGenerator;
+    private PrefabManager prefabManager;
+    private FinalGridScript finalGridScript;
+
 
     // Getters and Setters
     public GameObject RoomPrefab { get { return roomPrefab; } set { roomPrefab = value; } }
     public GameObject OutlinePrefab { get { return outlinePrefab; } set { outlinePrefab = value; } }
 
-    // Existing methods...
 
+
+
+    //for final grid tester 
+    [HideInInspector]
+    public bool canDraw = false;
 
     void Start()
+    {
+
+        gridOutlineChanger = GetComponent<Square>();
+        wallGenerator = GetComponent<WallGenerator>();
+        prefabManager = GetComponent<PrefabManager>();
+        finalGridScript = GetComponent<FinalGridScript>();
+
+
+
+        mapInitializer();
+
+
+
+    }
+
+    public void mapInitializer ()
     {
         bool roomsAreSet = false;
 
@@ -82,6 +108,28 @@ public class GridManager : MonoBehaviour
 
             wallGenerator.GenerateWalls();
 
+
+
+            finalGridScript.AnalyzeScene();
+            canDraw = true;
+
+
+
+
+            ///
+            /* 
+
+
+
+             Dictionary<string, Vector3> gridToUse = finalGridScript.GridToUse;
+
+             foreach (KeyValuePair<string, Vector3> entry in gridToUse)
+             {
+                 Vector3 position = entry.Value;
+                 position.y = 10; // Set Y position to 10
+
+                 Instantiate(cubePrefab, position, Quaternion.identity);
+             }*/
         }
     }
 
@@ -268,6 +316,7 @@ public class GridManager : MonoBehaviour
                     GameObject roomInstance = Instantiate(roomPrefab, cellPosition, Quaternion.identity);
                     roomInstance.name = prefabCounter.ToString(); // Name the prefab with its number
                     roomInstance.transform.parent = roomParent.transform;
+                    roomInstance.tag = "Grid"; // Set the desired tag
                     prefabCounter++;
                 }
 
@@ -286,6 +335,8 @@ public class GridManager : MonoBehaviour
                     GameObject roomInstance = Instantiate(roomPrefab, cellPosition, Quaternion.identity);
                     roomInstance.name = prefabCounter.ToString(); // Name the prefab with its number
                     roomInstance.transform.parent = roomParent.transform;
+                    roomInstance.tag = "Grid"; // Set the desired tag
+
                     prefabCounter++;
                 }
             }

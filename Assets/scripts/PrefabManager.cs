@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PrefabManager : MonoBehaviour
 {
-    [Header("Wall Generator Prefabs")]
+    [Header("Wall & floor Generator Prefabs")]
     public GameObject normalWallPrefab;
     public GameObject cornerPrefab;
     public GameObject bossWallPrefab;
     public GameObject bossCornerPrefab;
     public GameObject passagePrefab;
+    public GameObject floorPrefab;
+
 
     [Header("Grid Manager Prefabs")]
     public GameObject roomPrefab;
@@ -55,6 +57,7 @@ public class PrefabManager : MonoBehaviour
             wallGenerator.BossWallPrefab = bossWallPrefab;
             wallGenerator.BossCornerPrefab = bossCornerPrefab;
             wallGenerator.PassagePrefab = passagePrefab;
+            wallGenerator.FloorPrefab = floorPrefab;
         }
     }
 

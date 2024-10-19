@@ -9,6 +9,7 @@ TagManager:
   - bossRoom
   - wall
   - door
+  - Grid
   layers:
   - Default
   - TransparentFX
