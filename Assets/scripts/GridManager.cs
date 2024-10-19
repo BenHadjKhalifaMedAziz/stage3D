@@ -67,7 +67,7 @@ public class GridManager : MonoBehaviour
     [HideInInspector]
     public bool canDraw = false;
 
-    [SerializeField]
+    [HideInInspector]
     public bool AllSet = false;     //<-----------------------------map has been generated 
 
     void Start()

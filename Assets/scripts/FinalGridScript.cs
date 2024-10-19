@@ -23,7 +23,7 @@ public class FinalGridScript : MonoBehaviour
 
 
     private bool allset = false ; //<------------------------------------------------------grid mawjoud
-    public bool Allset { get { return allset; } set { allset = value; } }
+    public bool Allset { get { return allset; } set { allset = value; } }//  to verefy check from this getter 
 
 
 
@@ -74,7 +74,7 @@ public class FinalGridScript : MonoBehaviour
                     {
                         // Add to GridToUse dictionary
                         GridToUse.Add(GridToUse.Count, child.position);
-                        Debug.Log($"Added {child.name} at {child.position} from room {room.name} with tag {tag}");
+                     //   Debug.Log($"Added {child.name} at {child.position} from room {room.name} with tag {tag}");
                     }
                 }
             }
@@ -90,7 +90,7 @@ public class FinalGridScript : MonoBehaviour
                 {
                     // Add to GridToUse dictionary
                     GridToUse.Add(GridToUse.Count, child.position);
-                    Debug.Log($"Added passage {child.name} at {child.position}");
+                  //  Debug.Log($"Added passage {child.name} at {child.position}");
                 }
             }
         }
