@@ -21,6 +21,12 @@ public class FinalGridScript : MonoBehaviour
     public GameObject cubePrefab; ///new for final grid verif 
 
 
+
+    private bool allset = false ; //<------------------------------------------------------grid mawjoud
+    public bool Allset { get { return allset; } set { allset = value; } }
+
+
+
     private void Start()
     {
         gridManager = GetComponent<GridManager>();
@@ -34,7 +40,7 @@ public class FinalGridScript : MonoBehaviour
        
             if (!hasCalledFunction )
             {
-                if (gridManager.canDraw)
+                if (allset)
                 {
                     if (ShowGrid)
                     {

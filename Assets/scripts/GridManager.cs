@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -66,6 +67,9 @@ public class GridManager : MonoBehaviour
     [HideInInspector]
     public bool canDraw = false;
 
+    [SerializeField]
+    public bool AllSet = false;     //<-----------------------------map has been generated 
+
     void Start()
     {
 
@@ -108,10 +112,12 @@ public class GridManager : MonoBehaviour
 
             wallGenerator.GenerateWalls();
 
-
+            
 
             finalGridScript.AnalyzeScene();
+            AllSet = true;
             canDraw = true;
+            finalGridScript.Allset = true;
 
 
 
