@@ -118,4 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a3a002a83629b4ba06d40c5ee7d1a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brickSize: 1
+  brickSize: 5

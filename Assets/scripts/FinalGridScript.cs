@@ -21,8 +21,10 @@ public class FinalGridScript : MonoBehaviour
     public GameObject cubePrefab; ///new for final grid verif 
 
 
-
+    [SerializeField]
     private bool allset = false ; //<------------------------------------------------------grid mawjoud
+
+
     public bool Allset { get { return allset; } set { allset = value; } }//  to verefy check from this getter 
 
 
