@@ -3,36 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
-{ /// <summary>
-  /// /////////////////////////////////////////////last version before major optimisation 
-  /// </summary>
-
-
-    // Public variables for grid and room dimensions, number of rooms, and room prefab
-    // public int gridWidth = 10;
-    // public int gridHeight = 10;
-    /*    public int roomMinWidth = 5;
-        public int roomMaxWidth = 8;
-        public int roomMinHeight = 5; // In 3D, this can be considered as "depth"
-        public int roomMaxHeight = 8; // In 3D, this can be considered as "depth"
-        public int numberOfRooms = 8;
-        private GameObject roomPrefab;
-        public int bossRoomParent;
-
-        // Dictionary to store cell information
-        private Dictionary<Vector3, CellInfo> gridDictionary = new Dictionary<Vector3, CellInfo>();
-
-        public Square gridOutlineChanger; // Reference to the GridOutlineChanger script
-        private GameObject outlinePrefab; // Add this line to declare the outline prefab
-
-
-        public PrefabManager prefabManager;
-        public WallGenerator wallGenerator; // 
-
-        // Getters and Setters
-        public GameObject roomPrefab { get { return roomPrefab; } set { roomPrefab = value; } }
-        public GameObject outlinePrefab { get { return outlinePrefab; } set { outlinePrefab = value; } }
-    */
+{ 
 
     [Header("Rooms Dimentions ")]
     public int roomMinWidth = 5;
@@ -53,6 +24,7 @@ public class GridManager : MonoBehaviour
     private WallGenerator wallGenerator;
     private PrefabManager prefabManager;
     private FinalGridScript finalGridScript;
+    private fournitureGrid fournitureGridScript;
 
 
     // Getters and Setters
@@ -77,9 +49,13 @@ public class GridManager : MonoBehaviour
         prefabManager = GetComponent<PrefabManager>();
         finalGridScript = GetComponent<FinalGridScript>();
 
+        fournitureGridScript = GetComponent<fournitureGrid>();
+
 
 
         mapInitializer();
+        fournitureGridScript.RoomsAnalyzer();
+        fournitureGridScript.PopulateChildGrid();
 
 
 
@@ -121,43 +97,11 @@ public class GridManager : MonoBehaviour
 
 
 
-            ///
-            /* 
-
-
-
-             Dictionary<string, Vector3> gridToUse = finalGridScript.GridToUse;
-
-             foreach (KeyValuePair<string, Vector3> entry in gridToUse)
-             {
-                 Vector3 position = entry.Value;
-                 position.y = 10; // Set Y position to 10
-
-                 Instantiate(cubePrefab, position, Quaternion.identity);
-             }*/
+          
         }
     }
 
-    /* void CreateGrid()
-     {
-         // Loop through each cell in the grid
-         for (int x = 0; x < gridWidth; x++)
-         {
-             for (int y = 0; y < gridHeight; y++)
-             {
-                 // Create a new cell position
-                 Vector2 cellPosition = new Vector2(x, y);
-                 // Create a new CellInfo object with the cell's position and reserved status
-                 CellInfo cellInfo = new CellInfo
-                 {
-                     location = cellPosition,
-                     reserved = false
-                 };
-                 // Add the cell information to the dictionary
-                 gridDictionary.Add(cellPosition, cellInfo);
-             }
-         }
-     }*/
+   
 
     void GenerateRooms()
     {
