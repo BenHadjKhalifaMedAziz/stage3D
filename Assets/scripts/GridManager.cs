@@ -55,7 +55,6 @@ public class GridManager : MonoBehaviour
 
         mapInitializer();
         fournitureGridScript.RoomsAnalyzer();
-        fournitureGridScript.PopulateChildGrid();
 
 
 

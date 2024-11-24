@@ -17,6 +17,15 @@ public class details : MonoBehaviour
 
     public string wallData = "";
 
+
+    
+    [Tooltip("This is the layer data int.")]
+    public int layer1 = 0;
+
+    public int layer = 0;
+
+
+
     private void Update()
     {
        if (doorData != doorData1)
@@ -31,6 +40,15 @@ public class details : MonoBehaviour
             wallData1 = wallData;
             Debug.Log("change");
         }
+
+
+        if (layer != layer1)
+        {
+            layer1 = layer;
+            Debug.Log("change");
+        }
+
+
 
     }
 }

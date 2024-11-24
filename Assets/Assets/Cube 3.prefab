@@ -118,3 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62a1e7b0613f9a4f9346de2e221e384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorData1: 
+  doorData: 
+  wallData1: 
+  wallData: 

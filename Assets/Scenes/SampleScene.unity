@@ -172,7 +172,7 @@ MonoBehaviour:
   roomMaxWidth: 16
   roomMinHeight: 9
   roomMaxHeight: 20
-  numberOfRooms: 2
+  numberOfRooms: 20
   canDraw: 0
   AllSet: 0
 --- !u!4 &602643740
