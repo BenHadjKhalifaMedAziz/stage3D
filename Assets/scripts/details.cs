@@ -6,9 +6,9 @@ public class details : MonoBehaviour
 {
     [TextArea]
     [Tooltip("This is the door data string.")]
-    public string doorData1 = "";
+    public bool doorData1 = false;
 
-    public string doorData = "";
+    public bool doorData = false;
 
 
     [TextArea]
@@ -18,11 +18,21 @@ public class details : MonoBehaviour
     public string wallData = "";
 
 
-    
+    [TextArea]
+    [Tooltip("This is the tag string.")]
+    public string tag1 = "";
+
+    public string tag = "";
+
+
+
     [Tooltip("This is the layer data int.")]
     public int layer1 = 0;
 
     public int layer = 0;
+
+
+
 
 
 
@@ -45,6 +55,12 @@ public class details : MonoBehaviour
         if (layer != layer1)
         {
             layer1 = layer;
+            Debug.Log("change");
+        }
+
+        if (tag != tag1)
+        {
+            tag1 = tag;
             Debug.Log("change");
         }
 
