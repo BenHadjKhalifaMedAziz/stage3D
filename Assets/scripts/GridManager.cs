@@ -25,7 +25,7 @@ public class GridManager : MonoBehaviour
     private PrefabManager prefabManager;
     private FinalGridScript finalGridScript;
     private fournitureGrid fournitureGridScript;
-
+    private fournitureSpawning fournitureSpawningScript;
 
     // Getters and Setters
     public GameObject RoomPrefab { get { return roomPrefab; } set { roomPrefab = value; } }
@@ -50,11 +50,17 @@ public class GridManager : MonoBehaviour
         finalGridScript = GetComponent<FinalGridScript>();
 
         fournitureGridScript = GetComponent<fournitureGrid>();
-
+        fournitureSpawningScript = GetComponent<fournitureSpawning>();
 
 
         mapInitializer();
         fournitureGridScript.RoomsAnalyzer();
+        if (fournitureSpawningScript != null)
+        {
+            Debug.Log("not null bitch");
+            fournitureSpawningScript.InstantiateWallFrames();
+        }
+       
 
 
 

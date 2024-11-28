@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 602643742}
   - component: {fileID: 602643744}
   - component: {fileID: 602643738}
+  - component: {fileID: 602643745}
   m_Layer: 0
   m_Name: generator
   m_TagString: Untagged
@@ -168,11 +169,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c1eee60c66ce14a8128f9a6060fa9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomMinWidth: 9
-  roomMaxWidth: 16
-  roomMinHeight: 9
-  roomMaxHeight: 20
-  numberOfRooms: 20
+  roomMinWidth: 12
+  roomMaxWidth: 25
+  roomMinHeight: 13
+  roomMaxHeight: 30
+  numberOfRooms: 3
   canDraw: 0
   AllSet: 0
 --- !u!4 &602643740
@@ -255,6 +256,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6864e1ac553521944b330d36ab13b510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &602643745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602643737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58119e8e043bd8f4383da0c1753ab63d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallFrames:
+  - {fileID: 1954894492030283816, guid: ebf0864f9c8cf7641b35a1039e440806, type: 3}
+  - {fileID: 7367606722664898893, guid: cbaf5972c5f25db43a2a9aaddd57438e, type: 3}
+  - {fileID: 2354926041829710680, guid: f08cef561a7b91d44ad8c682a22767fa, type: 3}
+  - {fileID: 7317725101521338496, guid: 0cc7c113ebdb7744a8a49c9a8974e7d6, type: 3}
+  spawnProbability: 0.5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class fournitureGrid : MonoBehaviour
 {
-    public static Dictionary<GameObject, (string roomType, int nbrDoors, Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer)>)> RoomsList =
-        new Dictionary<GameObject, (string, int, Dictionary<int, (GameObject, Vector3, string, bool, string, int)>)>();
+    public static Dictionary<GameObject, (string roomType, int nbrDoors, Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)>)> RoomsList =
+        new Dictionary<GameObject, (string, int, Dictionary<int, (GameObject, Vector3, string, bool, string, int, bool)>)>();
 
     public void RoomsAnalyzer()
     {
@@ -20,7 +20,7 @@ public class fournitureGrid : MonoBehaviour
             foreach (GameObject room in rooms)
             {
                 int doorCount = 0;
-                Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer)> childData = new();
+                Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData = new();
 
                 foreach (Transform child in room.transform)
                 {
@@ -40,10 +40,14 @@ public class fournitureGrid : MonoBehaviour
                     if (detailsComponent != null)
                     {
                         detailsComponent.layer = initialLayer;
+                        detailsComponent.reserved = false;
+                        detailsComponent.tag = childTag;
+
+
                     }
 
                     int childKey = child.gameObject.GetInstanceID();
-                    childData[childKey] = (child.gameObject, child.position, child.tag, false, string.Empty, initialLayer);
+                    childData[childKey] = (child.gameObject, child.position, child.tag, false, string.Empty, initialLayer, false);
                 }
 
                 // Process layer 1 for wall data assignment
@@ -56,14 +60,28 @@ public class fournitureGrid : MonoBehaviour
                 ProcessLayerTwoWallData(childData);
 
                 ProcessDoorAdjacentLayerTwo(childData);
+              //  DebugChildData(childData);
 
                 RoomsList.Add(room, (tag, doorCount, childData));
-                Debug.Log($"Room {room.name} of type {tag} has {doorCount} doors and {childData.Count} child grids.");
+             //   Debug.Log($"Room {room.name} of type {tag} has {doorCount} doors and {childData.Count} child grids.");
             }
         }
     }
+    private void DebugChildData(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData)
+    {
+        foreach (var child in childData.Values)
+        {
+            Debug.Log($"Child Data for {child.childObject.name}: " +
+                      $"GameObject: {child.childObject.name}, " +
+                      $"Position: {child.position}, " +
+                      $"Tag: {child.tag}, " +
+                      $"Layer: {child.layer}, " +
+                      $"Reserved: {child.reserved}, " +
+                      $"WallData: {child.wallData}");
+        }
+    }
 
-    private void ProcessDoorAdjacentLayerTwo(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer)> childData)
+    private void ProcessDoorAdjacentLayerTwo(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData)
     {
         // Find all doors in the child data
         var doors = childData.Values.Where(c => c.tag == "door").ToList();
@@ -89,16 +107,16 @@ public class fournitureGrid : MonoBehaviour
                         }
 
                         int key = layerTwoCell.childObject.GetInstanceID();
-                        childData[key] = (layerTwoCell.childObject, layerTwoCell.position, layerTwoCell.tag, true, layerTwoCell.wallData, layerTwoCell.layer);
+                        childData[key] = (layerTwoCell.childObject, layerTwoCell.position, layerTwoCell.tag, true, layerTwoCell.wallData, layerTwoCell.layer, layerTwoCell.reserved);
 
-                        Debug.Log($"Layer 2 cell at {layerTwoCell.position} flagged as adjacent to door at {door.position}");
+                      //  Debug.Log($"Layer 2 cell at {layerTwoCell.position} flagged as adjacent to door at {door.position}");
                     }
                 }
             }
         }
     }
 
-    private void ProcessLayerOneWallData(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer)> childData)
+    private void ProcessLayerOneWallData(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData)
     {
         var layerOneChildren = childData.Values.Where(c => c.layer == 1).ToList();
 
@@ -107,22 +125,71 @@ public class fournitureGrid : MonoBehaviour
         float minZ = layerOneChildren.Min(c => c.position.z);
         float maxZ = layerOneChildren.Max(c => c.position.z);
 
+
+        // Identify doors first
+        var doors = childData.Values.Where(c => c.tag == "door").ToList();
+
         foreach (var child in layerOneChildren)
         {
             string wallData = AssignWallData(child.position, minX, maxX, minZ, maxZ);
 
             int key = child.childObject.GetInstanceID();
-            childData[key] = (child.childObject, child.position, child.tag, child.doorData, wallData, child.layer);
 
             var detailsComponent = child.childObject.GetComponent<details>();
-            if (detailsComponent != null)
+
+            // If it's a corner, set the tag to "corner"
+            if (wallData.Contains("C"))
             {
-                detailsComponent.wallData = wallData;
+                
+                childData[key] = (child.childObject, child.position, "corner", child.doorData, wallData, child.layer, child.reserved);
+                if (detailsComponent != null)
+                {
+                    detailsComponent.wallData = wallData;
+                    detailsComponent.tag = "corner";
+
+
+                }
+            }
+            else 
+            {
+                childData[key] = (child.childObject, child.position, child.tag, child.doorData, wallData, child.layer, child.reserved);
+                if (detailsComponent != null)
+                {
+                    detailsComponent.wallData = wallData;
+                    detailsComponent.tag = "corner";
+
+                }
+
+            }
+          
+           
+
+
+            // Check if the current child is adjacent to any door
+            foreach (var door in doors)
+            {
+                if (IsAdjacent(child.position, door.position))
+                {
+                    // If the child is adjacent to the door, set its tag to "nextDoor"
+                    childData[key] = (child.childObject, child.position, "nextDoor", child.doorData, wallData, child.layer, child.reserved);
+
+                    // Optionally, update the details component if needed
+                    if (detailsComponent != null)
+                    {
+                        detailsComponent.tag = "nextDoor";
+                    }
+                    break;  // No need to check for other doors once this condition is met
+                }
             }
         }
+
+
+        
+
+
     }
 
-    private void ProcessLayerTwoWallData(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer)> childData)
+    private void ProcessLayerTwoWallData(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData)
     {
         var layerTwoChildren = childData.Values.Where(c => c.layer == 2).ToList();
 
@@ -135,8 +202,18 @@ public class fournitureGrid : MonoBehaviour
         {
             string wallData = AssignWallData(child.position, minX, maxX, minZ, maxZ);
 
+
             int key = child.childObject.GetInstanceID();
-            childData[key] = (child.childObject, child.position, child.tag, child.doorData, wallData, child.layer);
+            // If it's a corner, set the tag to "corner"
+            if (wallData.Contains("C"))
+            {
+                childData[key] = (child.childObject, child.position, "corner", child.doorData, wallData, child.layer, child.reserved);
+                
+            }
+            else 
+            {
+                childData[key] = (child.childObject, child.position, child.tag, child.doorData, wallData, child.layer, child.reserved);
+            }
 
             var detailsComponent = child.childObject.GetComponent<details>();
             if (detailsComponent != null)
@@ -171,12 +248,12 @@ public class fournitureGrid : MonoBehaviour
         return wallData;
     }
 
-    private void ProcessChildLayers(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer)> childData, int currentLayer)
+    private void ProcessChildLayers(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData, int currentLayer)
     {
         bool foundNewLayer = false;
 
         var currentLayerChildren = childData.Values.Where(c => c.layer == currentLayer).ToList();
-        var updates = new Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int newLayer)>();
+        var updates = new Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int newLayer, bool reserved)>();
 
         foreach (var child in currentLayerChildren)
         {
@@ -185,7 +262,7 @@ public class fournitureGrid : MonoBehaviour
                 if (IsAdjacent(child.position, potentialNeighbor.position))
                 {
                     int neighborKey = potentialNeighbor.childObject.GetInstanceID();
-                    updates[neighborKey] = (potentialNeighbor.childObject, potentialNeighbor.position, potentialNeighbor.tag, potentialNeighbor.doorData, potentialNeighbor.wallData, currentLayer + 1);
+                    updates[neighborKey] = (potentialNeighbor.childObject, potentialNeighbor.position, potentialNeighbor.tag, potentialNeighbor.doorData, potentialNeighbor.wallData, currentLayer + 1, potentialNeighbor.reserved);
                     foundNewLayer = true;
                 }
             }
@@ -196,7 +273,7 @@ public class fournitureGrid : MonoBehaviour
             int key = update.Key;
             if (childData.ContainsKey(key))
             {
-                childData[key] = (update.Value.childObject, update.Value.position, update.Value.tag, update.Value.doorData, update.Value.wallData, update.Value.newLayer);
+                childData[key] = (update.Value.childObject, update.Value.position, update.Value.tag, update.Value.doorData, update.Value.wallData, update.Value.newLayer, update.Value.reserved);
 
                 var detailsComponent = update.Value.childObject.GetComponent<details>();
                 if (detailsComponent != null)
