@@ -60,9 +60,15 @@ Each cell in a room contains layer information for hierarchical object placement
   - Uses dictionaries for faster cell lookups, avoiding iterative overhead associated with lists.  
   - Ensures efficient computation even with extensive room generation involving hundreds of rooms.
  
+Here are two examples to illustrate the optimization:  
+1. The first example shows the memory usage and performance of an older version before optimization. As you can see, rendering just 17 main rooms took over 9 minutes and consumed 4.6 GB of RAM.  
+2. The second example showcases a recent optimized 3D version with 50 rooms, which consumes only around 1.2 GB of RAM, even with all the 3D assets included.  
+
+1. **before**  
     <img width="452" alt="OLD VERSION RAM" src="https://github.com/user-attachments/assets/8bb024fc-636c-4aab-9e36-3ae0112216b2">
 <img width="715" alt="opt" src="https://github.com/user-attachments/assets/8a17865b-1736-4a1a-bcac-98b4a828dbcb">
 
+2. **after**  
 <img width="1139" alt="popt1" src="https://github.com/user-attachments/assets/45784d52-6fdd-4960-a16d-138865c74296">
 <img width="654" alt="popt2" src="https://github.com/user-attachments/assets/9537f506-b331-4477-a9a1-c81477ec666c">
 
@@ -87,12 +93,8 @@ The following screenshots demonstrate the 2D version's resource usage and the ev
 4. **3D Version 1** 
  <img width="401" alt="Screenshot 2024-11-29 230354" src="https://github.com/user-attachments/assets/2821433e-3d02-4183-a307-a44fea1740fc">
  
-5. **Adding Real Walls and Planes** 
+5. **Adding Real Walls and Planes  & Props (Pictures)** 
 <img width="1089" alt="last V" src="https://github.com/user-attachments/assets/f8b0a9c7-a147-4a92-bbde-53cd8cb0d46e">
-
-6. **Adding Props: Wall Frames and Pictures**
-![Uploading last V.png…]()
-
 
 8. **Showcase: Unlimited Rooms (300 Rooms)
 <img width="1280" alt="300room" src="https://github.com/user-attachments/assets/fc301ef0-0955-48e1-be66-db83d7097fe9">
