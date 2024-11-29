@@ -87,7 +87,7 @@ The following screenshots demonstrate the 2D version's resource usage and the ev
 2. **Version 2: Wall ,Doors and Passages Creation**  
 <img width="394" alt="2" src="https://github.com/user-attachments/assets/e1cb71fe-5508-408b-b868-f35d7e2ba23e">
 
-3. **Showcase: Unlimited Rooms (400 Rooms)**  
+3. **Showcase: Unlimited Rooms (800 Rooms)**  
 <img width="371" alt="3" src="https://github.com/user-attachments/assets/2b815c9e-ab7a-4542-a4da-2c16265b7dc0">
 
 4. **3D Version 1** 
