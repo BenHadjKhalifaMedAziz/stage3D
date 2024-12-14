@@ -86,6 +86,9 @@ public class fournitureGrid : MonoBehaviour
         // Find all doors in the child data
         var doors = childData.Values.Where(c => c.tag == "door").ToList();
 
+        // Find all nextdoor in the child data
+        var Nextdoors = childData.Values.Where(c => c.tag == "nextDoor").ToList();
+        Debug.Log("number of nextdoors tester :" + Nextdoors.Count());
         // Find all layer 2 children
         var layerTwoChildren = childData.Values.Where(c => c.layer == 2).ToList();
 
@@ -114,6 +117,34 @@ public class fournitureGrid : MonoBehaviour
                 }
             }
         }
+
+
+        foreach (var nextdoor in Nextdoors)
+        {
+            foreach (var layerTwoCell in layerTwoChildren)
+            {
+                // Check if the wall data of the door matches the wall data of the layer 2 cell
+                if (layerTwoCell.wallData.Contains(nextdoor.wallData))
+                {
+                    // Check if they are adjacent
+                    if (IsAdjacent(nextdoor.position, layerTwoCell.position))
+                    {
+                        // Update the door detail or flag layer 2 cell
+                        var detailsComponent = layerTwoCell.childObject.GetComponent<details>();
+                        if (detailsComponent != null)
+                        {
+                            detailsComponent.tag = "nextDoor"; // Flag as adjacent to door
+                        }
+
+                        int key = layerTwoCell.childObject.GetInstanceID();
+                        childData[key] = (layerTwoCell.childObject, layerTwoCell.position, "nextDoor", layerTwoCell.doorData, layerTwoCell.wallData, layerTwoCell.layer, layerTwoCell.reserved);
+
+                        //  Debug.Log($"Layer 2 cell at {layerTwoCell.position} flagged as adjacent to door at {door.position}");
+                    }
+                }
+            }
+        }
+
     }
 
     private void ProcessLayerOneWallData(Dictionary<int, (GameObject childObject, Vector3 position, string tag, bool doorData, string wallData, int layer, bool reserved)> childData)
@@ -156,7 +187,7 @@ public class fournitureGrid : MonoBehaviour
                 if (detailsComponent != null)
                 {
                     detailsComponent.wallData = wallData;
-                    detailsComponent.tag = "corner";
+                    detailsComponent.tag = child.tag;
 
                 }
 
@@ -221,6 +252,7 @@ public class fournitureGrid : MonoBehaviour
                 detailsComponent.wallData = wallData;
             }
         }
+
     }
 
     private string AssignWallData(Vector3 position, float minX, float maxX, float minZ, float maxZ)

@@ -173,7 +173,7 @@ MonoBehaviour:
   roomMaxWidth: 25
   roomMinHeight: 13
   roomMaxHeight: 30
-  numberOfRooms: 3
+  numberOfRooms: 20
   canDraw: 0
   AllSet: 0
 --- !u!4 &602643740
@@ -268,12 +268,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58119e8e043bd8f4383da0c1753ab63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnProbability: 0.487
   wallFrames:
-  - {fileID: 1954894492030283816, guid: ebf0864f9c8cf7641b35a1039e440806, type: 3}
-  - {fileID: 7367606722664898893, guid: cbaf5972c5f25db43a2a9aaddd57438e, type: 3}
-  - {fileID: 2354926041829710680, guid: f08cef561a7b91d44ad8c682a22767fa, type: 3}
-  - {fileID: 7317725101521338496, guid: 0cc7c113ebdb7744a8a49c9a8974e7d6, type: 3}
-  spawnProbability: 0.5
+  - prefab: {fileID: 1954894492030283816, guid: ebf0864f9c8cf7641b35a1039e440806, type: 3}
+    width: 1
+  - prefab: {fileID: 7367606722664898893, guid: cbaf5972c5f25db43a2a9aaddd57438e, type: 3}
+    width: 1
+  - prefab: {fileID: 2354926041829710680, guid: f08cef561a7b91d44ad8c682a22767fa, type: 3}
+    width: 1
+  - prefab: {fileID: 7317725101521338496, guid: 0cc7c113ebdb7744a8a49c9a8974e7d6, type: 3}
+    width: 2
+  wallFournitures:
+  - prefab: {fileID: 8461807735809341496, guid: 4262436f39079934e8357c73b17871d6, type: 3}
+    width: 0
+  - prefab: {fileID: 3026383701292261051, guid: 29cd0c5afb0bc454e83ed894a9e49a51, type: 3}
+    width: 1
+  centerFournitures:
+  - prefab: {fileID: 8461807735809341496, guid: 4262436f39079934e8357c73b17871d6, type: 3}
+    width: 0
+  spawnProbability1: 0.107
+  spawnProbability2: 0.021
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

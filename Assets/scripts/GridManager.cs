@@ -54,11 +54,15 @@ public class GridManager : MonoBehaviour
 
 
         mapInitializer();
+
+
         fournitureGridScript.RoomsAnalyzer();
         if (fournitureSpawningScript != null)
         {
-            Debug.Log("not null bitch");
-            fournitureSpawningScript.InstantiateWallFrames();
+           
+            Debug.Log("not nulll  ");
+
+           // fournitureSpawningScript.InstantiateWallFrames();
         }
        
 
